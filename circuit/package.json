@@ -1,0 +1,26 @@
+{
+  "name": "pomwa-circuit",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/JFKongphop/pomwa-circuit#readme",
+  "bugs": {
+    "url": "https://github.com/JFKongphop/pomwa-circuit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JFKongphop/pomwa-circuit.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "circomlib": "^2.0.5",
+    "circomlibjs": "^0.1.7",
+    "fixed-merkle-tree": "^0.7.3",
+    "snarkjs": "^0.7.5"
+  }
+}
