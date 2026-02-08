@@ -19,13 +19,15 @@ const { toBytes32 } = require('./utils/bytesConverter');
   const leaves = rawLeaves.map(x => poseidonHash(x));
   leaves[0] = poseidonHash([1, 2, 900]);
   leaves[1] = poseidonHash([2, 3, 900]);
-  leaves[2] = poseidonHash([3, 4, 900]);
-  leaves[3] = poseidonHash([4, 5, 900]);
+  // leaves[2] = poseidonHash([3, 4, 900]);
+  // leaves[3] = poseidonHash([4, 5, 900]);
   
   const tree = new MerkleTree(TREE_LEVELS, leaves, {
     hashFunction: (a, b) => poseidonHash([a, b]),
     zeroElement: 0n
   });
 
-  console.log(tree.proof(leaves[0]))
+  console.log(toBytes32(tree.root))
+
+  // console.log(tree.proof(leaves[0]))
 })();

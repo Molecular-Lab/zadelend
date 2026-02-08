@@ -12,6 +12,7 @@ template Withdraw(N) {
   signal input loanAmount;
   signal input pathElements[N];
   signal input pathIndices[N];
+  signal output publicLoanAmount;
 
   component commitmentHash = Poseidon(3);
   commitmentHash.inputs[0] <== secret[0];
@@ -29,6 +30,8 @@ template Withdraw(N) {
   }
 
   root === merkle.root;
+
+  publicLoanAmount <== loanAmount;
 }
 
 component main = Withdraw(2);
