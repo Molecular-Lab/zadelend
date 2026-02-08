@@ -1,30 +1,17 @@
 import { TabsContent } from "@/components/ui/tabs";
 
-import { Label } from "@/components/ui/label";
-
-import { ArrowRight, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useDepositStore } from "@/store/useDepositStore";
-import {
-  AssetCard,
-  AssetNFTCard,
-  NetworkCard,
-} from "@/components/common/Cards/cards";
-import { GenerateProof, ProofInputParam } from "@/hooks/useGenProof";
-import { ProofInput, ProofOutput, useProofStore } from "@/store/useProofStore";
+import { AssetNFTCard } from "@/components/common/Cards/cards";
+import { GenerateProof } from "@/hooks/useGenProof";
+import { ProofInput, useProofStore } from "@/store/useProofStore";
 import { toast } from "sonner";
 import { getLeafs } from "./getLeafs";
 import { useAccount } from "wagmi";
-import { poseidon2, poseidon3 } from "poseidon-lite";
-import {
-  exportSolidityCallData,
-  generateProof,
-  verifyProof,
-} from "@/lib/circuit";
-import MerkleTree from "fixed-merkle-tree";
-import { isValidElement, useEffect, useState } from "react";
+
+import { useState } from "react";
 import { ClaimProof } from "./claimToken";
+import { scrollSepolia } from "viem/chains";
 
 type ProofContentInfoProp = {
   value: string;
@@ -40,17 +27,12 @@ type ProofContentInfoProp = {
 
 export const ProofContentInfo = ({
   value,
-  from,
-  to,
   tokenIcon,
   overlayIcon,
   networkIcon,
-  isConnected,
-  buttonLabel,
-  setActiveTab,
 }: ProofContentInfoProp) => {
   const { input, setInput, output, setOutput, reset } = useProofStore();
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
   const [validCallData, setVaidCalled] = useState(output !== null);
   const quoted =
     Array.isArray(input?.pathElements) &&
@@ -117,7 +99,8 @@ export const ProofContentInfo = ({
                   root: root,
                 } as ProofInput);
               } catch (error) {
-                toast.warning("invalid nullifier or nonce");
+                console.log("Error fetching leafs:", error);
+                toast.warning("CCIP Messaging your assets");
               }
               setVaidCalled(false);
               return;
@@ -145,9 +128,32 @@ export const ProofContentInfo = ({
               input.root &&
               address
             ) {
+              if (chainId !== scrollSepolia.id) {
+                toast.error("Please switch to Scroll Sepolia network");
+                return;
+              }
               console.log(input, output);
-              await ClaimProof(output, input?.commitment, input?.root, address);
-              // reset()f
+              const txHashed = await ClaimProof(
+                output,
+                input?.commitment,
+                input?.root,
+                address
+              );
+
+              toast.success(
+                <div>
+                  Claiming your Asset Transaction :&nbsp;
+                  <a
+                    href={`https://sepolia.scrollscan.com/tx/${txHashed}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline font-medium"
+                  >
+                    View on Etherscan
+                  </a>
+                </div>
+              );
+              reset();
             }
           }}
         >

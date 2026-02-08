@@ -1,31 +1,14 @@
 import { Footer } from "@/components/common/Footer/footer";
-import { Navbar } from "@/components/common/Navbar/Navbar";
-import { Button } from "@/components/ui/button";
-import {
-  Bitcoin,
-  Shield,
-  Zap,
-  Droplets,
-  ArrowRight,
-  Lock,
-  Layers,
-  Repeat,
-} from "lucide-react";
+
+import { Bitcoin, Shield, Zap, Droplets } from "lucide-react";
+import Link from "next/link";
 
 // Types
 interface FeatureCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
-  colorScheme: "red" | "green" | "blue" | "yellow";
-}
-
-interface StepCardProps {
-  icon: React.ReactNode;
-  stepNumber: number;
-  title: string;
-  description: string;
-  colorScheme: "blue" | "purple" | "teal";
+  colorScheme: "red" | "green" | "blue" | "yellow" | "purple";
 }
 
 // Color scheme configurations
@@ -64,8 +47,11 @@ const colorSchemes = {
   },
   purple: {
     bg: "bg-purple-100",
+    hover: "hover:bg-purple-100/80",
     iconBg: "bg-purple-100",
     iconText: "text-purple-600",
+    ring: "hover:ring-purple-400",
+    titleText: "text-purple-700",
   },
   teal: {
     bg: "bg-teal-100",
@@ -85,7 +71,7 @@ function FeatureCard({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded-2xl ${colors.bg} ${colors.hover} p-6 shadow-lg ring-1 ring-gray-200/50 hover:ring-2 ${colors.ring} transition-all duration-300 md:min-h-[25vh]`}
+      className={`flex flex-col items-center justify-center rounded-2xl ${colors.bg} ${colors.hover} p-6 shadow-lg ring-1 ring-gray-200/50 hover:ring-1 hover:scale-[1.01] ${colors.ring} transition-all duration-300 md:min-h-[25vh]`}
     >
       <div
         className={`flex justify-center w-fit items-center gap-2 rounded-full ${colors.iconBg} px-3 py-1 text-xs font-semibold ${colors.iconText}`}
@@ -113,13 +99,13 @@ export default function Home() {
       title: "Multi-Asset Support",
       description:
         "Tokens, NFTs, and RWAs — unified into cross-chain liquidity",
-      colorScheme: "red" as const,
+      colorScheme: "purple" as const,
     },
     {
       icon: <Shield className="size-6" />,
       title: "Privacy-First",
       description:
-        "Zero-knowledge proofs keep your transfers untraceable and self-sovereign",
+        "Zero-knowledge proofs keep your transfers unlinkable and self-sovereign",
       colorScheme: "green" as const,
     },
     {
@@ -139,34 +125,54 @@ export default function Home() {
   ];
 
   return (
-    <main className="flex flex-col justify-center items-center overflow-auto bg-gradient-to-br from-link-backgroundlight to-blue-50">
-      <section className="flex flex-col items-center justify-center h-screen text-center mx-auto px-6 `">
-        <h1 className="text-6xl md:text-9xl font-bold text-slate-700 flex flex-col">
-          <span>Cross-Chain</span>
-          <span className="block text-link-primary/90">Liquidity</span>
-        </h1>
-        <p className="mt-6 text-xl font-medium text-gray-400 max-w-3xl">
-          Cross-Chain Asset Collateralized Loan with ZK Withdrawal
-        </p>
-      </section>
+    <main className="flex flex-col justify-center items-center overflow-auto">
+      {/* Hero Section with Pattern Background */}
+      <div className="relative h-screen w-full">
+        {/* Background Pattern */}
+        <div className="absolute inset-0">
+          <div className="relative h-full w-full bg-link-backgroundlight [&>div]:absolute [&>div]:h-full [&>div]:w-full [&>div]:bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [&>div]:[background-size:16px_16px] [&>div]:[mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]">
+            <div></div>
+          </div>
+        </div>
 
+        {/* Hero Content */}
+        <div className="relative z-10 flex h-full flex-col items-center justify-center px-4">
+          <div className="max-w-3xl text-center">
+            <h1 className="text-6xl md:text-9xl font-bold text-slate-700 flex flex-col mb-8">
+              <span>Cross-Chain</span>
+              <span className="block text-link-primary/90">Liquidity</span>
+            </h1>
+            <p className="mt-6 text-xl font-medium text-gray-500 max-w-3xl mx-auto mb-8">
+              Cross-Chain Asset Collateralized enabling unlinkable, proof-based
+              assets liquid across chains with complete user custody.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                href="/deposit"
+                className="rounded-lg px-6 py-2 font-medium bg-link-primary text-white hover:bg-link-primary/90"
+              >
+                Get Started
+              </Link>
+              <Link
+                href="/workflow"
+                className="rounded-lg border px-6 py-2 font-medium border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+              >
+                Learn More
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Features Section */}
-      <div className="flex flex-col gap-5 font-bold text-4xl lg:text-7xl items-center justify-center text-center bg-link-lightblue/10 md py-[20vh] px-10 lg:px-40">
-        <h2 className="text-slate-700">
-          Transform the value of your assets into cross-chain
+      <div className="flex flex-col gap-5 font-bold text-4xl lg:text-7xl items-center justify-center text-center bg-link-lightblue/10 md py-[20vh] w-full px-10 lg:px-40">
+        <h2 className="text-3xl text-slate-600 px-5 block">
+          Breaking the boundaries of traditional DeFi with
         </h2>
-        <h2 className="text-link-primary/90 my-10">OWN-PROVE-MOVE</h2>
+        <h2 className="text-link-primary/90 mb-10">Zero Knowledge Proofs</h2>
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6 items-center justify-center lg:max-w-4xl">
           {features.map((feature, index) => (
             <FeatureCard key={index} {...feature} />
           ))}
-        </div>
-        {/* CTA Buttons */}
-        <div className="mt-16 flex flex-col sm:flex-row gap-4">
-          <Button variant="default" className="bg-blue-500 hover:bg-blue-600">
-            Start Liquidating Assets
-          </Button>
-          <Button variant="default">Learn More</Button>
         </div>
       </div>
       <Footer />

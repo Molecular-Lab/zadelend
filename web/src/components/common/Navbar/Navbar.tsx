@@ -38,14 +38,14 @@ export function Navbar() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 className="text-base font-medium text-link-dark transition-colors hover:text-link-primary/90 duration-400 bg-transparent hover:bg-transparent focus:bg-transparent focus:text-link-primary/90"
-                href="/claim"
+                href="/withdraw"
               >
-                Claim
+                Withdraw
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
-                className="text-base font-medium text-link-dark transition-colors hover:text-link-primary/90 duration-400 bg-transparent hover:bg-transparent"
+                className="text-base font-medium text-link-dark transition-colors hover:text-link-primary/90 duration-400 bg-transparent hover:bg-transparent focus:bg-transparent focus:text-link-primary/90"
                 href="/workflow"
               >
                 How It Works
@@ -65,7 +65,7 @@ export function Navbar() {
         {/* Wallet */}
         <div className="">
           <ConnectButton
-            chainStatus="none"
+            chainStatus="icon"
             showBalance={false}
             accountStatus={"full"}
             label="Connect"

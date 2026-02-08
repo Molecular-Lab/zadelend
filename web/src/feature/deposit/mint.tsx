@@ -1,6 +1,6 @@
 "use client";
 
-import { Wallet, ArrowRight, Copy } from "lucide-react";
+import { Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { TabsContent } from "@/components/ui/tabs";
@@ -8,8 +8,7 @@ import { cn } from "@/lib/utils";
 
 import { toast } from "sonner";
 import { useCopyToClipboard } from "@/hooks/useCopy";
-import { useDepositStore } from "@/store/useDepositStore";
-import { Address, fromRlp } from "viem";
+import { Address } from "viem";
 import { useMintMockNFT } from "@/store/useMintMockStore";
 import { NetworkCard } from "@/components/common/Cards/cards";
 
@@ -28,17 +27,10 @@ type MintContentInfoProps = {
 };
 
 export const MintContentInfo = ({
-  value,
   from,
-  to,
-  tokenIcon,
-  networkIcon,
   isConnected,
-  buttonLabel,
 }: MintContentInfoProps) => {
-  const { tokenId } = useDepositStore();
   const { latestTokenId, getLatestTokenID } = useMintMockNFT();
-  
   const { handleCopy: FactoryCopy } = useCopyToClipboard(SepoliaContract.nft);
   const { address } = useAccount();
   return (
@@ -78,8 +70,7 @@ export const MintContentInfo = ({
                   </a>
                 </div>
               );
-              const latest = await getLatestTokenID();
-              
+              await getLatestTokenID();
             } catch (err) {
               toast.error("Mint failed");
               console.error(err);
@@ -109,16 +100,16 @@ export const MintContentInfo = ({
         </div>
 
         {/* Token ID List */}
-        <div className="bg-white/50 backdrop-blur-xl rounded-xl p-4 mt-4 space-y-2">
-          <h4 className="text-gray-700 font-semibold text-sm">
-            Minted Token IDs
-          </h4>
-          {latestTokenId !== 0 ? (
+        {latestTokenId !== 0 ? (
+          <div className="bg-white/50 backdrop-blur-xl rounded-xl p-4 mt-4 space-y-2">
+            <h4 className="text-gray-700 font-semibold text-sm">
+              Minted Token IDs
+            </h4>
             <div className="flex justify-between items-center text-sm font-mono bg-white/70 px-3 py-2 rounded-lg border border-gray-200">
               {latestTokenId}
             </div>
-          ) : undefined}
-        </div>
+          </div>
+        ) : undefined}
       </div>
     </TabsContent>
   );

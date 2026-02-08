@@ -2,19 +2,22 @@ import { TabsContent } from "@/components/ui/tabs";
 
 import { Label } from "@/components/ui/label";
 
-import { ArrowRight, Wallet } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useDepositStore } from "@/store/useDepositStore";
 import { AssetCard, NetworkCard } from "@/components/common/Cards/cards";
 import { DepositNFT } from "./depositNFT";
-import { Account, Address, Hex } from "viem";
+import { Address, Hex } from "viem";
 
 import { useAccount } from "wagmi";
 
 import { poseidon3 } from "poseidon-lite";
 import { toBytes32 } from "@/utils/byte32";
 import { ScrollContract, SepoliaContract } from "@/lib/contract";
+import { useEffect } from "react";
+import { sepolia } from "viem/chains";
+import { toast } from "sonner";
 
 type BridgeTabProps = {
   value: string;
@@ -33,11 +36,15 @@ export const DepositContentInfo: React.FC<BridgeTabProps> = ({
   tokenIcon,
   networkIcon,
   isConnected,
-  buttonLabel,
 }: BridgeTabProps) => {
   const { tokenId, nonce, nullifier } = useDepositStore();
-  const { address } = useAccount();
+  const { address, chainId: currentChain } = useAccount();
 
+  useEffect(() => {
+    if (currentChain !== sepolia.id) {
+      toast.warning("Please switch to Sepolia network");
+    }
+  }, [currentChain]);
   return (
     <TabsContent
       value={value}
@@ -86,7 +93,7 @@ export const DepositContentInfo: React.FC<BridgeTabProps> = ({
               console.log("Current commitment:", commitment);
               const byteCommitment = toBytes32(commitment);
 
-              await DepositNFT({
+              const { txhashed } = await DepositNFT({
                 account: address as Address,
                 tokenId: BigInt(tokenId),
                 amount: 100n,
@@ -94,6 +101,32 @@ export const DepositContentInfo: React.FC<BridgeTabProps> = ({
                 nftAddress: SepoliaContract.nft as Address,
                 receiverAddress: ScrollContract.Loaner as Address,
               });
+              toast.success(
+                <div>
+                  Transaction sent:&nbsp;
+                  <a
+                    href={`https://sepolia.etherscan.io/tx/${txhashed}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline font-medium"
+                  >
+                    View on Etherscan
+                  </a>
+                </div>
+              );
+              toast.success(
+                <div>
+                  Search with transaction hased:&nbsp;
+                  <a
+                    href={`https://ccip.chain.link/?search=${txhashed}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline font-medium"
+                  >
+                    View on CCIP
+                  </a>
+                </div>
+              );
             } else if (value === "withdraw") {
               console.log("execute withdraw logic here");
             }
