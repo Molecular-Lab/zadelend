@@ -1,9 +1,10 @@
-import React from 'react'
+import { Footer } from "@/components/common/Footer/footer";
+import DepositWithTabs from "@/feature/deposit";
 
-type Props = {}
-
-export default function page({}: Props) {
+export default function DepositPage() {
   return (
-    <div>page</div>
-  )
+    <>
+      <DepositWithTabs />
+    </>
+  );
 }
